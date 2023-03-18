@@ -1,3 +1,3 @@
-array-list-debug: src/array-list.c
-	gcc -Wall -g -o bin/array-list src/array-list.c
-	gdb bin/array-list
+array-list-test: src/array-list.c src/array-list-test.c
+	gcc -Wall -g -o bin/array-list-test src/array-list.c src/array-list-test.c
+	gdb bin/array-list-test
