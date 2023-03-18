@@ -1,22 +1,18 @@
 #include <stdio.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
-#define LIST_SIZE 8
+#include "array-list.h"
 
-typedef struct {
-	void *items;
-	unsigned item_size;
-	unsigned int list_top;
-	unsigned int list_length;
-} arraylist_t;
+#define LIST_SIZE 8
 
 typedef struct {
 	unsigned int dead: 1;
 	unsigned int hp: 4;
 } enemy_t;
 
-arraylist_t *arraylist_alloc(unsigned int item_size, unsigned int list_length)
+arraylist_t *arraylist_alloc(uint8_t item_size, uint8_t list_length)
 {
 	arraylist_t *list = malloc(sizeof(arraylist_t));
 	list->items = malloc(item_size * list_length);
@@ -63,7 +59,7 @@ void print_enemies(arraylist_t *list)
 	{
 		enemy_t *e = &((enemy_t *)list->items)[i];
 		printf("%d: dead %d, hp %d\n", i, e->dead, e->hp);
-	}
+ 	}
 }
 
 int main()
