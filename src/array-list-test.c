@@ -2,46 +2,56 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
+#include <curses.h>
 
 #include "array-list.h"
 
 #define LIST_SIZE 8
 
 typedef struct {
-	unsigned int dead: 1;
-	unsigned int hp: 4;
+	unsigned int x: 8;
+	unsigned int y: 8;
 } enemy_t;
 
-void print_enemies(arraylist_t *list)
+void draw_enemies(arraylist_t *list)
 {
+        clear();
 	for (int i = 0; i < list->list_top; i++)
 	{
 		enemy_t *e = &((enemy_t *)list->items)[i];
-		printf("%d: dead %d, hp %d\n", i, e->dead, e->hp);
+		mvprintw(e->y, e->x, "E");
  	}
+ 	refresh();
 }
 
 int main()
 {
+        // Setup curses
+        initscr();
+        cbreak();
+        noecho();       
+        
 	enemy_t a = {
-		.dead = 1,
-		.hp = 8
+		.x = 0,
+		.y = 0
 	};
 
-	arraylist_t *list = arraylist_alloc(sizeof(enemy_t), 4);
+	arraylist_t *list = arraylist_alloc(sizeof(enemy_t), LIST_SIZE);
 	arraylist_push(list, &a);
 
-	a.dead = 0;
-	a.hp = 6;
+	a.x = 20;
+	a.y = 15;
 	arraylist_push(list, &a);
 
-	print_enemies(list);
+	draw_enemies(list);
+	getch();
 
 	arraylist_remove(list, 0);
 
-	print_enemies(list);
+	draw_enemies(list);
+	getch();
 
 	arraylist_free(list);
-
-	return 0;
+	endwin();
+	exit(0);
 }
